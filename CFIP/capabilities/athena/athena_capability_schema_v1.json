@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cfip.schemas/athena_capability_schema_v1.json",
+  "title": "Athena Capability Definition",
+  "description": "Schema defining AI-allowed Athena API capabilities for CFIP",
+  "type": "object",
+  "required": [
+    "capabilityId",
+    "system",
+    "domain",
+    "verb",
+    "object",
+    "description",
+    "endpoint",
+    "riskLevel",
+    "aiUsage",
+    "approvalRequired",
+    "constraints",
+    "outputContract"
+  ],
+  "properties": {
+    "capabilityId": {
+      "type": "string",
+      "pattern": "^ATH_[A-Z0-9_]+$",
+      "description": "Unique identifier for the Athena capability"
+    },
+
+    "system": {
+      "type": "string",
+      "enum": ["Athena"],
+      "description": "External system this capability belongs to"
+    },
+
+    "domain": {
+      "type": "string",
+      "enum": [
+        "PracticeConfiguration",
+        "Claims",
+        "Payments",
+        "Remittance",
+        "RevenueCycleManagement"
+      ],
+      "description": "Business domain of the capability"
+    },
+
+    "verb": {
+      "type": "string",
+      "enum": ["READ", "WRITE"],
+      "description": "Access type of the capability"
+    },
+
+    "object": {
+      "type": "string",
+      "enum": [
+        "Department",
+        "Claim",
+        "ClaimDetail",
+        "Payment",
+        "PaymentApplication",
+        "EOB"
+      ],
+      "description": "Athena domain object operated on"
+    },
+
+    "description": {
+      "type": "string",
+      "minLength": 10,
+      "description": "Business-level intent of the capability"
+    },
+
+    "endpoint": {
+      "type": "string",
+      "pattern": "^(GET|POST)\\s+/v1/\\{practiceid\\}/[a-zA-Z0-9/_-]+$",
+      "description": "HTTP method and endpoint template"
+    },
+
+    "riskLevel": {
+      "type": "string",
+      "enum": ["LOW", "MEDIUM", "HIGH"],
+      "description": "Operational and compliance risk level"
+    },
+
+    "aiUsage": {
+      "type": "string",
+      "enum": ["PLANNING_ONLY", "PROHIBITED"],
+      "description": "Whether AI may reference this capability during workflow planning"
+    },
+
+    "approvalRequired": {
+      "type": "boolean",
+      "description": "Whether human approval is required before execution"
+    },
+
+    "constraints": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 5
+      },
+      "description": "Hard business and compliance constraints on usage"
+    },
+
+    "outputContract": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-zA-Z0-9_.\\[\\]]+$"
+      },
+      "description": "Whitelisted output fields returned by the capability"
+    }
+  },
+
+  "additionalProperties": false
+}

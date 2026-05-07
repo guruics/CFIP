@@ -1,5 +1,151 @@
 ﻿{
   "version": "v1",
   "system": "Athena",
-  "capabilities": []
+  "domain": "RevenueCycleManagement",
+  "capabilities": [
+    {
+      "capabilityId": "ATH_GET_DEPARTMENTS",
+      "system": "Athena",
+      "domain": "PracticeConfiguration",
+      "verb": "READ",
+      "object": "Department",
+      "description": "Retrieve departments used as root context for claim and payment queries",
+      "endpoint": "GET /v1/{practiceid}/departments",
+      "riskLevel": "LOW",
+      "aiUsage": "PLANNING_ONLY",
+      "approvalRequired": false,
+      "constraints": [
+        "Read-only",
+        "Required as root context for claims access"
+      ],
+      "outputContract": [
+        "departmentid",
+        "name",
+        "status"
+      ]
+    },
+
+    {
+      "capabilityId": "ATH_GET_CLAIMS",
+      "system": "Athena",
+      "domain": "Claims",
+      "verb": "READ",
+      "object": "Claim",
+      "description": "Retrieve claims submitted to insurance payers for reconciliation",
+      "endpoint": "GET /v1/{practiceid}/claims",
+      "riskLevel": "LOW",
+      "aiUsage": "PLANNING_ONLY",
+      "approvalRequired": false,
+      "constraints": [
+        "Filtered by department",
+        "Insurance claims only",
+        "Read-only"
+      ],
+      "outputContract": [
+        "claimid",
+        "patientid",
+        "departmentid",
+        "payerid",
+        "status",
+        "submittedamount",
+        "servicedate"
+      ]
+    },
+
+    {
+      "capabilityId": "ATH_GET_CLAIM_DETAILS",
+      "system": "Athena",
+      "domain": "Claims",
+      "verb": "READ",
+      "object": "ClaimDetail",
+      "description": "Retrieve detailed line-level information for a specific claim",
+      "endpoint": "GET /v1/{practiceid}/claims/{claimid}",
+      "riskLevel": "LOW",
+      "aiUsage": "PLANNING_ONLY",
+      "approvalRequired": false,
+      "constraints": [
+        "Read-only",
+        "Used for CPT-level reconciliation context"
+      ],
+      "outputContract": [
+        "claimid",
+        "procedurecode",
+        "chargedamount",
+        "units",
+        "modifiers"
+      ]
+    },
+
+    {
+      "capabilityId": "ATH_GET_PAYMENTS",
+      "system": "Athena",
+      "domain": "Payments",
+      "verb": "READ",
+      "object": "Payment",
+      "description": "Retrieve insurance payments applied to claims",
+      "endpoint": "GET /v1/{practiceid}/payments",
+      "riskLevel": "LOW",
+      "aiUsage": "PLANNING_ONLY",
+      "approvalRequired": false,
+      "constraints": [
+        "Insurance payments only",
+        "Filtered by payment source"
+      ],
+      "outputContract": [
+        "paymentid",
+        "claimid",
+        "amount",
+        "paymentdate",
+        "payerid"
+      ]
+    },
+
+    {
+      "capabilityId": "ATH_GET_REMITTANCE",
+      "system": "Athena",
+      "domain": "Remittance",
+      "verb": "READ",
+      "object": "EOB",
+      "description": "Retrieve remittance advice (EOB/835 equivalent) associated with payer payments",
+      "endpoint": "GET /v1/{practiceid}/remittance",
+      "riskLevel": "MEDIUM",
+      "aiUsage": "PLANNING_ONLY",
+      "approvalRequired": false,
+      "constraints": [
+        "Read-only",
+        "Used to derive allowed amounts and adjustments"
+      ],
+      "outputContract": [
+        "remittanceid",
+        "payerid",
+        "claimid",
+        "allowedamount",
+        "paidamount",
+        "adjustmentcodes"
+      ]
+    },
+
+    {
+      "capabilityId": "ATH_POST_PAYMENT_APPLICATION",
+      "system": "Athena",
+      "domain": "Payments",
+      "verb": "WRITE",
+      "object": "PaymentApplication",
+      "description": "Apply payer payments or adjustments to claims after reconciliation approval",
+      "endpoint": "POST /v1/{practiceid}/payments",
+      "riskLevel": "HIGH",
+      "aiUsage": "PLANNING_ONLY",
+      "approvalRequired": true,
+      "constraints": [
+        "Claim-level only",
+        "Must reference approved reconciliation batch",
+        "Manual approval required",
+        "No bank-level operations"
+      ],
+      "outputContract": [
+        "paymentid",
+        "status"
+      ]
+    }
+  ]
 }
