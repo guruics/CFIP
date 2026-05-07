@@ -1,0 +1,14 @@
+{
+  "capabilityId": "string",
+  "system": "QuickBooks",
+  "domain": "Accounting",
+  "verb": "READ | WRITE",
+  "object": "QB Object Name",
+  "description": "Business-level intent",
+  "endpoint": "HTTP endpoint reference",
+  "riskLevel": "LOW | MEDIUM | HIGH",
+  "aiUsage": "PLANNING_ONLY | PROHIBITED",
+  "approvalRequired": true | false,
+  "constraints": ["string"],
+  "outputContract": ["fieldA", "fieldB"]
+}

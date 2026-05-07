@@ -1,0 +1,129 @@
+{
+  "version": "v1",
+  "system": "QuickBooks",
+  "domain": "Accounting",
+  "capabilities": [
+    {
+      "capabilityId": "QB_GET_DEPOSITS",
+      "system": "QuickBooks",
+      "domain": "Accounting",
+      "verb": "READ",
+      "object": "Deposit",
+      "description": "Retrieve bank deposits for payer-level reconciliation of Medicaid and Medicare EFTs",
+      "endpoint": "GET /v3/company/{companyId}/deposit",
+      "riskLevel": "LOW",
+      "aiUsage": "PLANNING_ONLY",
+      "approvalRequired": false,
+      "constraints": [
+        "Read-only",
+        "Used for payer reconciliation only",
+        "No patient-level attribution",
+        "Filtered by date range, amount, or reference number"
+      ],
+      "outputContract": [
+        "depositId",
+        "txnDate",
+        "totalAmt",
+        "privateNote",
+        "line[].amount",
+        "line[].entityRef"
+      ]
+    },
+
+    {
+      "capabilityId": "QB_GET_ACCOUNTS",
+      "system": "QuickBooks",
+      "domain": "Accounting",
+      "verb": "READ",
+      "object": "Account",
+      "description": "Retrieve chart of accounts for validation and classification during reconciliation",
+      "endpoint": "GET /v3/company/{companyId}/account",
+      "riskLevel": "LOW",
+      "aiUsage": "PLANNING_ONLY",
+      "approvalRequired": false,
+      "constraints": [
+        "Read-only",
+        "Used for account validation only",
+        "No account creation or modification"
+      ],
+      "outputContract": [
+        "accountId",
+        "name",
+        "accountType",
+        "accountSubType"
+      ]
+    },
+
+    {
+      "capabilityId": "QB_GET_CUSTOMERS_PAYERS",
+      "system": "QuickBooks",
+      "domain": "Accounting",
+      "verb": "READ",
+      "object": "Customer",
+      "description": "Retrieve insurance payers configured as customers; patients are explicitly excluded",
+      "endpoint": "GET /v3/company/{companyId}/customer",
+      "riskLevel": "MEDIUM",
+      "aiUsage": "PLANNING_ONLY",
+      "approvalRequired": false,
+      "constraints": [
+        "Insurance payers only",
+        "Patients must not exist as customers",
+        "Read-only"
+      ],
+      "outputContract": [
+        "customerId",
+        "displayName",
+        "active"
+      ]
+    },
+
+    {
+      "capabilityId": "QB_GET_JOURNAL_ENTRIES",
+      "system": "QuickBooks",
+      "domain": "Accounting",
+      "verb": "READ",
+      "object": "JournalEntry",
+      "description": "Retrieve historical journal entries for audit validation and reconciliation traceability",
+      "endpoint": "GET /v3/company/{companyId}/journalentry",
+      "riskLevel": "LOW",
+      "aiUsage": "PLANNING_ONLY",
+      "approvalRequired": false,
+      "constraints": [
+        "Read-only",
+        "Used for audit and verification only"
+      ],
+      "outputContract": [
+        "journalEntryId",
+        "txnDate",
+        "line[].accountRef",
+        "line[].amount",
+        "privateNote"
+      ]
+    },
+
+    {
+      "capabilityId": "QB_CREATE_JOURNAL_ENTRY",
+      "system": "QuickBooks",
+      "domain": "Accounting",
+      "verb": "WRITE",
+      "object": "JournalEntry",
+      "description": "Create summary-level journal entries to record approved reconciliation adjustments",
+      "endpoint": "POST /v3/company/{companyId}/journalentry",
+      "riskLevel": "HIGH",
+      "aiUsage": "PLANNING_ONLY",
+      "approvalRequired": true,
+      "constraints": [
+        "Summary totals only",
+        "No patient-level data",
+        "No claim-level detail",
+        "Must reference reconciliation batch ID",
+        "Manual approval required prior to execution"
+      ],
+      "outputContract": [
+        "journalEntryId",
+        "txnDate",
+        "status"
+      ]
+    }
+  ]
+}

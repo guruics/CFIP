@@ -1,0 +1,106 @@
+﻿{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cfip.schemas/qb_capability_schema_v1.json"
+}
+{
+  "title": "QuickBooks Capability Definition",
+  "description": "Schema defining AI-allowed QuickBooks capabilities for CFIP",
+  "type": "object",
+  "required": [
+    "capabilityId",
+    "system",
+    "domain",
+    "verb",
+    "object",
+    "description",
+    "endpoint",
+    "riskLevel",
+    "aiUsage",
+    "approvalRequired",
+    "constraints",
+    "outputContract"
+  ],
+  "properties": {
+    "capabilityId": {
+      "type": "string",
+      "pattern": "^QB_[A-Z0-9_]+$",
+      "description": "Unique identifier for the capability"
+    },
+
+    "system": {
+      "type": "string",
+      "enum": ["QuickBooks"],
+      "description": "External system this capability belongs to"
+    },
+
+    "domain": {
+      "type": "string",
+      "enum": ["Accounting"],
+      "description": "Business domain of the capability"
+    },
+
+    "verb": {
+      "type": "string",
+      "enum": ["READ", "WRITE"],
+      "description": "Access level of the capability"
+    },
+
+    "object": {
+      "type": "string",
+      "enum": [
+        "Deposit",
+        "JournalEntry",
+        "Account",
+        "Customer"
+      ],
+      "description": "QuickBooks object operated on"
+    },
+
+    "description": {
+      "type": "string",
+      "minLength": 10,
+      "description": "Business-level intent of the capability"
+    },
+
+    "endpoint": {
+      "type": "string",
+      "pattern": "^(GET|POST|PUT|DELETE)\\s+/v3/company/\\{companyId\\}/[a-zA-Z0-9/_-]+$",
+      "description": "HTTP method and endpoint template"
+    },
+
+    "riskLevel": {
+      "type": "string",
+      "enum": ["LOW", "MEDIUM", "HIGH"],
+      "description": "Operational and compliance risk level"
+    },
+
+    "aiUsage": {
+      "type": "string",
+      "enum": ["PLANNING_ONLY", "PROHIBITED"],
+      "description": "Whether AI may reference this capability"
+    },
+
+    "approvalRequired": {
+      "type": "boolean",
+      "description": "Whether human approval is required before execution"
+    },
+
+    "constraints": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 5
+      },
+      "description": "Hard rules that constrain usage"
+    },
+
+    "outputContract": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-zA-Z0-9_.\\[\\]]+$"
+      },
+      "description": "Allowed output fields returned by this capability"
+    }
+  }
+}

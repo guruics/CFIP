@@ -1,0 +1,26 @@
+{
+  "capabilityId": "QB_GET_DEPOSITS",
+  "system": "QuickBooks",
+  "domain": "Accounting",
+  "verb": "READ",
+  "object": "Deposit",
+  "description": "Retrieve bank deposits for payer reconciliation",
+  "endpoint": "GET /v3/company/{companyId}/deposit",
+  "riskLevel": "LOW",
+  "aiUsage": "PLANNING_ONLY",
+  "approvalRequired": false,
+  "constraints": [
+    "Read-only",
+    "Used for reconciliation only",
+    "Filtered by date, amount, reference number"
+  ],
+  "outputContract": [
+    "depositId",
+    "txnDate",
+    "totalAmt",
+    "bankAccountRef",
+    "privateNote",
+    "line[].amount",
+    "line[].entityRef"
+  ]
+}
