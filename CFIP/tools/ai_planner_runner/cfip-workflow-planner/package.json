@@ -1,0 +1,15 @@
+﻿{
+  "name": "cfip-workflow-planner",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "AI planning harness for CFIP Workflow DSL",
+  "scripts": {
+    "run": "node index.js"
+  },
+  "dependencies": {
+    "ajv": "^8.12.0",
+    "dotenv": "^16.4.5",
+    "openai": "^4.30.0"
+  }
+}

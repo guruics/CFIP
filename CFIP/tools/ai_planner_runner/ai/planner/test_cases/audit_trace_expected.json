@@ -1,0 +1,31 @@
+{
+  "workflowId": "WF_MEDICAID_AUDIT_TRACE",
+  "version": "v1",
+  "description": "Provide an audit trace of Medicaid payments by correlating QuickBooks deposits with Athena claims and remittance data",
+  "trigger": "MANUAL",
+  "steps": [
+    {
+      "stepId": "STEP_1",
+      "type": "CAPABILITY",
+      "capabilityId": "QB_GET_DEPOSITS",
+      "output": "qbDeposits"
+    },
+    {
+      "stepId": "STEP_2",
+      "type": "CAPABILITY",
+      "capabilityId": "ATH_GET_CLAIMS",
+      "output": "claims"
+    },
+    {
+      "stepId": "STEP_3",
+      "type": "CAPABILITY",
+      "capabilityId": "ATH_GET_REMITTANCE",
+      "output": "remittance"
+    },
+    {
+      "stepId": "STEP_4",
+      "type": "OUTPUT",
+      "output": "auditReconciliationReport"
+    }
+  ]
+}

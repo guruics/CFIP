@@ -1,0 +1,1 @@
+﻿Reconcile a Medicaid payment received in QuickBooks with corresponding claims in Athena and prepare adjustments if there are discrepancies.

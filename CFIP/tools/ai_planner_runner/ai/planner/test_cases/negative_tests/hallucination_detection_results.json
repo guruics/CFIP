@@ -1,0 +1,7 @@
+{
+  "workflowId": "WF_UNSUPPORTED_PAYER_SUBMISSION",
+  "version": "v1",
+  "description": "The requested operation cannot be completed because submitting claims to payers and updating payer contracts are not supported by the currently registered Athena or QuickBooks capabilities.",
+  "trigger": "MANUAL",
+  "steps": []
+}

@@ -1,0 +1,7 @@
+{
+  "workflowId": "WF_UNSUPPORTED_PATIENT_CORRECTION",
+  "version": "v1",
+  "description": "The requested operation cannot be completed because patient-level claim corrections are not supported in QuickBooks and are outside the allowed capabilities.",
+  "trigger": "MANUAL",
+  "steps": []
+}

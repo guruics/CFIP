@@ -1,0 +1,137 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cfip.schemas/workflow_dsl_schema_v1.json",
+  "title": "CFIP Workflow DSL Schema v1",
+  "description": "Schema defining AI-generated workflows for CFIP using registered capabilities",
+  "type": "object",
+
+  "required": [
+    "workflowId",
+    "version",
+    "description",
+    "trigger",
+    "steps"
+  ],
+
+  "properties": {
+    "workflowId": {
+      "type": "string",
+      "pattern": "^WF_[A-Z0-9_]+$",
+      "description": "Unique identifier for the workflow"
+    },
+
+    "version": {
+      "type": "string",
+      "enum": ["v1"],
+      "description": "Workflow DSL version"
+    },
+
+    "description": {
+      "type": "string",
+      "minLength": 10,
+      "description": "Business intent of the workflow"
+    },
+
+    "trigger": {
+      "type": "string",
+      "enum": [
+        "MANUAL",
+        "SCHEDULED",
+        "EVENT_QB_DEPOSIT",
+        "EVENT_ATHENA_PAYMENT"
+      ],
+      "description": "What initiates the workflow"
+    },
+
+    "steps": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/workflowStep"
+      }
+    }
+  },
+
+  "$defs": {
+    "workflowStep": {
+      "type": "object",
+      "required": [
+        "stepId",
+        "type"
+      ],
+
+      "properties": {
+        "stepId": {
+          "type": "string",
+          "pattern": "^STEP_[0-9]+$"
+        },
+
+        "type": {
+          "type": "string",
+          "enum": [
+            "CAPABILITY",
+            "DECISION",
+            "APPROVAL",
+            "OUTPUT"
+          ]
+        },
+
+        "capabilityId": {
+          "type": "string",
+          "pattern": "^(QB|ATH)_[A-Z0-9_]+$",
+          "description": "Referenced capability from a registry"
+        },
+
+        "inputMapping": {
+          "type": "object",
+          "additionalProperties": {
+            "type": ["string", "number", "boolean"]
+          },
+          "description": "Maps outputs from previous steps to this step's inputs"
+        },
+
+        "condition": {
+          "type": "string",
+          "description": "Expression evaluated by workflow engine (not AI)"
+        },
+
+        "approvalRole": {
+          "type": "string",
+          "enum": [
+            "BillingManager",
+            "FinanceManager",
+            "ComplianceOfficer"
+          ]
+        },
+
+        "output": {
+          "type": "string",
+          "description": "Named output artifact of the step"
+        }
+      },
+
+      "allOf": [
+        {
+          "if": {
+            "properties": { "type": { "const": "CAPABILITY" } }
+          },
+          "then": {
+            "required": ["capabilityId"]
+          }
+        },
+        {
+          "if": {
+            "properties": { "type": { "const": "APPROVAL" } }
+          },
+          "then": {
+            "required": ["approvalRole"]
+          }
+        }
+      ],
+
+      "additionalProperties": false
+    }
+  },
+
+  "additionalProperties": false
+}

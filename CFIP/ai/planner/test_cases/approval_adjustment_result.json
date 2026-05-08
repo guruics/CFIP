@@ -1,0 +1,19 @@
+{
+  "workflowId": "WF_APPLY_ATHENA_ADJUSTMENTS",
+  "version": "v1",
+  "description": "Apply approved Medicaid payment adjustments to Athena claims following reconciliation review",
+  "trigger": "MANUAL",
+  "steps": [
+    {
+      "stepId": "STEP_1",
+      "type": "APPROVAL",
+      "approvalRole": "BillingManager"
+    },
+    {
+      "stepId": "STEP_2",
+      "type": "CAPABILITY",
+      "capabilityId": "ATH_POST_PAYMENT_APPLICATION",
+      "condition": "approvalGranted == true"
+    }
+  ]
+}

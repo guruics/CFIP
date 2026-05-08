@@ -1,0 +1,48 @@
+{
+  "workflowId": "WF_MEDICAID_RECONCILIATION",
+  "version": "v1",
+  "description": "Reconcile Medicaid payer deposits from QuickBooks with Athena claims and remittance data and prepare approved adjustments if discrepancies are found",
+  "trigger": "EVENT_QB_DEPOSIT",
+  "steps": [
+    {
+      "stepId": "STEP_1",
+      "type": "CAPABILITY",
+      "capabilityId": "QB_GET_DEPOSITS",
+      "output": "qbDeposits"
+    },
+    {
+      "stepId": "STEP_2",
+      "type": "CAPABILITY",
+      "capabilityId": "ATH_GET_DEPARTMENTS",
+      "output": "departments"
+    },
+    {
+      "stepId": "STEP_3",
+      "type": "CAPABILITY",
+      "capabilityId": "ATH_GET_CLAIMS",
+      "output": "claims"
+    },
+    {
+      "stepId": "STEP_4",
+      "type": "CAPABILITY",
+      "capabilityId": "ATH_GET_REMITTANCE",
+      "output": "remittance"
+    },
+    {
+      "stepId": "STEP_5",
+      "type": "DECISION",
+      "condition": "depositedAmount != remittancePaidTotal"
+    },
+    {
+      "stepId": "STEP_6",
+      "type": "APPROVAL",
+      "approvalRole": "FinanceManager"
+    },
+    {
+      "stepId": "STEP_7",
+      "type": "CAPABILITY",
+      "capabilityId": "QB_CREATE_JOURNAL_ENTRY",
+      "condition": "approvalGranted == true"
+    }
+  ]
+}
