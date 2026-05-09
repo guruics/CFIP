@@ -1,0 +1,43 @@
+{
+  "workflowId": "WF_MEDICAID_QB_ATHENA_RECONCILIATION",
+  "version": "v1",
+  "description": "Workflow to reconcile Athena remittance data with QuickBooks cash deposits, generate variance report, and enable review of reconciliation variances.",
+  "trigger": "MANUAL",
+  "steps": [
+    {
+      "stepId": "STEP_1",
+      "type": "CAPABILITY",
+      "capabilityId": "ATH_GET_REMITTANCE"
+    },
+    {
+      "stepId": "STEP_2",
+      "type": "CAPABILITY",
+      "capabilityId": "QB_GET_DEPOSITS"
+    },
+    {
+      "stepId": "STEP_3",
+      "type": "CAPABILITY",
+      "capabilityId": "CFIP_RECONCILE_REMITTANCE_TO_DEPOSIT"
+    },
+    {
+      "stepId": "STEP_4",
+      "type": "DECISION",
+      "condition": "varianceAmount != 0"
+    },
+    {
+      "stepId": "STEP_5",
+      "type": "OUTPUT",
+      "output": "varianceAmount"
+    },
+    {
+      "stepId": "STEP_6",
+      "type": "CAPABILITY",
+      "capabilityId": "CFIP_GENERATE_VARIANCE_REPORT"
+    },
+    {
+      "stepId": "STEP_7",
+      "type": "OUTPUT",
+      "output": "varianceReport"
+    }
+  ]
+}

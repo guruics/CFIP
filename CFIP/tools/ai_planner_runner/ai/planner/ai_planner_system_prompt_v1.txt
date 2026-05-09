@@ -81,6 +81,31 @@ WORKFLOW DESIGN RULES
 - All identifiers must follow schema naming conventions
 
 ====================
+CAPABILITY BINDING (MANDATORY)
+====================
+
+The following capability registries are provided to you as structured JSON.
+
+Each registry contains the COMPLETE AND EXHAUSTIVE list of valid capabilityId values.
+
+You MUST:
+- Use capabilityId values exactly as they appear in the registries
+- Copy capabilityId strings verbatim (case-sensitive)
+- Assume no other capabilities exist
+
+You MUST NOT:
+- Invent new capabilityId values
+- Modify capabilityId strings
+- Use dot-notation or natural language names
+- Infer capabilities from endpoint descriptions
+
+If the user intent requires a capability not present in the registries,
+you MUST return a valid Workflow DSL object explaining the limitation
+and produce no CAPABILITY steps that perform WRITE operations.
+
+
+
+====================
 OUTPUT REQUIREMENTS
 ====================
 

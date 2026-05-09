@@ -78,7 +78,7 @@
 
         "capabilityId": {
           "type": "string",
-          "pattern": "^(QB|ATH)_[A-Z0-9_]+$",
+          "pattern": "^(QB|ATH|CFIP)_[A-Z0-9_]+$",
           "description": "Referenced capability from a registry"
         },
 

@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cfip.schemas/cfip_capability_schema_v1.json",
+  "title":    "riskLevel",  "title": "CFIP Capability Definition Schema v1",
+    "aiUsage",
+    "approvalRequired",
+    "constraints",
+    "outputContract"
+  ],
+
+  "properties": {
+    "capabilityId": {
+      "type": "string",
+      "pattern": "^CFIP_[A-Z0-9_]+$",
+      "description": "Unique identifier for the CFIP internal capability"
+    },
+
+    "system": {
+      "type": "string",
+      "enum": ["CFIP"],
+      "description": "System that owns the capability (internal to CFIP)"
+    },
+
+    "domain": {
+      "type": "string",
+      "enum": [
+        "Reconciliation",
+        "Reporting",
+        "VarianceAnalysis"
+      ],
+      "description": "Business domain of the CFIP capability"
+    },
+
+    "verb": {
+      "type": "string",
+      "enum": ["READ"],
+      "description": "CFIP capabilities are read-only by definition"
+    },
+
+    "object": {
+      "type": "string",
+      "enum": [
+        "RemittanceDepositVariance",
+        "ReconciliationSummary",
+        "VarianceReport"
+      ],
+      "description": "Logical object produced or analyzed by the capability"
+    },
+
+    "description": {
+      "type": "string",
+      "minLength": 10,
+      "description": "Business-level intent of the capability"
+    },
+
+    "endpoint": {
+      "type": "string",
+      "enum": ["INTERNAL"],
+      "description": "CFIP capabilities do not call external APIs"
+    },
+
+    "riskLevel": {
+      "type": "string",
+      "enum": ["LOW"],
+      "description": "CFIP reconciliation capabilities are low risk by design"
+    },
+
+    "aiUsage": {
+      "type": "string",
+      "enum": ["PLANNING_ONLY"],
+      "description": "AI may reference CFIP capabilities for planning only"
+    },
+
+    "approvalRequired": {
+      "type": "boolean",
+      "const": false,
+      "description": "CFIP read-only capabilities never require approval"
+    },
+
+    "constraints": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 5
+      },
+      "description": "Hard constraints governing CFIP capability behavior"
+    },
+
+    "outputContract": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-zA-Z0-9_.]+$"
+      },
+      "description": "Fields produced by the CFIP capability"
+    }
+  },
+
+  "additionalProperties": false
+}
+  "description": "Schema defining internal CFIP capabilities used for cross-system reconciliation and analysis",
+  "type": "object",
+
+  "required": [
+    "capabilityId",
+    "system",
+    "domain",
+    "verb",
+    "object",
+    "description",
+    "endpoint",

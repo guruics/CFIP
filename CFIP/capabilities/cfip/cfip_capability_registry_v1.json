@@ -1,0 +1,54 @@
+{
+  "capabilityId": "CFIP_RECONCILE_REMITTANCE_TO_DEPOSIT",
+  "system": "CFIP",
+  "domain": "Reconciliation",
+  "verb": "READ",
+  "object": "RemittanceDepositVariance",
+  "description": "Correlate Athena remittance amounts with QuickBooks cash deposits to identify variances at the payer and batch level. This capability performs internal reconciliation logic only and does not read or write data in external systems.",
+  "endpoint": "INTERNAL",
+  "riskLevel": "LOW",
+  "aiUsage": "PLANNING_ONLY",
+  "approvalRequired": false,
+  "constraints": [
+    "Read-only internal computation",
+    "No external API calls",
+    "No patient-level data persisted",
+    "Uses outputs from Athena and QuickBooks read capabilities only",
+    "Produces variance summary for review"
+  ],
+  "outputContract": [
+    "payer",
+    "depositBatchId",
+    "totalRemittanceAmount",
+    "totalDepositAmount",
+    "varianceAmount",
+    "varianceStatus"
+  ]
+},
+{
+  "capabilityId": "CFIP_GENERATE_VARIANCE_REPORT",
+  "system": "CFIP",
+  "domain": "Reporting",
+  "verb": "READ",
+  "object": "VarianceReport",
+  "description": "Generate a finalized reconciliation variance report summarizing differences between Athena remittance data and QuickBooks cash deposits for review and audit purposes.",
+  "endpoint": "INTERNAL",
+  "riskLevel": "LOW",
+  "aiUsage": "PLANNING_ONLY",
+  "approvalRequired": false,
+  "constraints": [
+    "Read-only internal computation",
+    "Consumes output of CFIP_RECONCILE_REMITTANCE_TO_DEPOSIT only",
+    "No external system mutation",
+    "Produces an auditable reconciliation artifact"
+  ],
+  "outputContract": [
+    "payer",
+    "depositBatchId",
+    "totalRemittanceAmount",
+    "totalDepositAmount",
+    "varianceAmount",
+    "varianceStatus",
+    "generatedTimestamp"
+  ]
+}
